@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center_vertical"
+        android:background="@color/colorPrimaryDark">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:id="@+id/home_search"
+            android:hint="搜索你想要的贝肯尼吧~"
+            android:focusable="true"
+            android:singleLine="true"
+            android:textSize="14sp"
+            android:layout_toLeftOf="@+id/scan"
+            android:layout_marginLeft="20dp"
+            android:background="@drawable/shape_box"
+            android:layout_marginRight="20dp"/>
+
+    </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/base_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </FrameLayout>
+
+</LinearLayout>
