@@ -35,17 +35,14 @@ public class HomePresenterImpl implements IHomePresenter {
                     if (mIHomeCallback!=null) {
                         mIHomeCallback.OnCategoryLoad(cateGoryies);
                     }
-                    LogUtils.d(HomePresenterImpl.this,"请求成功-->"+cateGoryies.toString());
                 }else{
-                    LogUtils.i(HomePresenterImpl.this,"请求失败-->");
                     if(mIHomeCallback!=null)
                         mIHomeCallback.onNetworkError();
                 }
             }
-
             @Override
             public void onFailure(Call<CateGoryies> call, Throwable t) {
-                LogUtils.e(HomePresenterImpl.this,"请求错误-->");
+                //LogUtils.e(HomePresenterImpl.this,"请求错误-->");
                 if(mIHomeCallback!=null)
                     mIHomeCallback.onNetworkError();
             }

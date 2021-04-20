@@ -144,11 +144,6 @@ public class CategoryPagePresenterImpl implements ICategoryPagerPresenter {
         }
     }
 
-    @Override
-    public void reload(int id) {
-
-    }
-
     private List<ICategoryCallback> callbacks=new ArrayList<>();
     @Override
     public void registerViewCallback(ICategoryCallback callback) {

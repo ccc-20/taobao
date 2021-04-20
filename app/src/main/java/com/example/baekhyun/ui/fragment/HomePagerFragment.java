@@ -54,6 +54,7 @@ public class HomePagerFragment extends BaseFragment implements ICategoryCallback
         mRecyclerView=view.findViewById(R.id.home_pager_content_lists);
         mTwinklingRefreshLayout=view.findViewById(R.id.home_pager_refresh);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mRecyclerView.setAdapter(mHomePagerContentAdapter);
         mRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
             public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
@@ -62,7 +63,6 @@ public class HomePagerFragment extends BaseFragment implements ICategoryCallback
             }
         });
         mHomePagerContentAdapter = new HomePagerContentAdapter();
-        mRecyclerView.setAdapter(mHomePagerContentAdapter);
         mTwinklingRefreshLayout.setEnableRefresh(false);
         mTwinklingRefreshLayout.setEnableLoadmore(true);
     }
@@ -70,8 +70,6 @@ public class HomePagerFragment extends BaseFragment implements ICategoryCallback
     @Override
     protected void initListener() {
         mHomePagerContentAdapter.setOnListclickListener(this);
-
-
         mTwinklingRefreshLayout.setOnRefreshListener(new RefreshListenerAdapter() {
                 @Override
             public void onLoadMore(TwinklingRefreshLayout refreshLayout) {

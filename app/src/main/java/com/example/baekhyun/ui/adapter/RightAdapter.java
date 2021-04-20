@@ -1,11 +1,5 @@
 package com.example.baekhyun.ui.adapter;
 
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.Intent;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,25 +8,16 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
 import com.example.baekhyun.R;
-import com.example.baekhyun.base.BaseApplication;
 import com.example.baekhyun.model.domain.SelectCategory;
-import com.example.baekhyun.presenter.ITicketPresenter;
-import com.example.baekhyun.ui.activity.TicketActivity;
 import com.example.baekhyun.utils.Constant;
-import com.example.baekhyun.utils.LogUtils;
-import com.example.baekhyun.utils.PresenterManager;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
-import static com.alipay.sdk.app.statistic.c.m;
 
 public class RightAdapter extends RecyclerView.Adapter<RightAdapter.hodler> {
 
