@@ -147,11 +147,6 @@ public class HomePagerFragment extends BaseFragment implements ICategoryCallback
     }
 
     @Override
-    public void onLooperLoaded(List<HomePagerContent.DataBean> contents) {
-
-    }
-
-    @Override
     protected void release() {
         if (mcategoryPagePresenter!=null) {
             mcategoryPagePresenter.unregisterViewCallback(this);

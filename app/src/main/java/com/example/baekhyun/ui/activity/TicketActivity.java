@@ -72,13 +72,9 @@ public class TicketActivity extends AppCompatActivity implements ITicketCallback
                 cm.setPrimaryClip(clipData);
                 if(HaveTb){
                     Intent taobao=new Intent();
-                    //taobao.setAction("android.intent.action.MAIN");
-                    //taobao.addCategory("android.intent.category.LAUNCHER");
-                    //com.taobao.taobao/com.taobao.tao.TBMainActivity
                     ComponentName componentName=new ComponentName("com.taobao.taobao","com.taobao.tao.TBMainActivity");
                     taobao.setComponent(componentName);
                     startActivity(taobao);
-
                 }else {
                     ToastUtil.getToast("口令复制成功（๑>\u0602<๑）");
                 }
@@ -98,7 +94,7 @@ public class TicketActivity extends AppCompatActivity implements ITicketCallback
               e.printStackTrace();
               HaveTb=false;
           }
-         // mTextView.setText(HaveTb?"领券吧":"复制口令");
+          mTextView.setText(HaveTb?"领券吧":"复制口令");
       }
     }
 
