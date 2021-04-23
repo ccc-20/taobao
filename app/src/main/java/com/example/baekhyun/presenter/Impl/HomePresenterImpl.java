@@ -35,15 +35,14 @@ public class HomePresenterImpl implements IHomePresenter {
                     if (mIHomeCallback != null) {
                         mIHomeCallback.OnCategoryLoad(cateGoryies);
                     }
-                } else {
-                    if (mIHomeCallback != null)
+                }else{
+                    if(mIHomeCallback!=null)
                         mIHomeCallback.onNetworkError();
                 }
             }
-
             @Override
             public void onFailure(Call<CateGoryies> call, Throwable t) {
-                if (mIHomeCallback != null)
+                if(mIHomeCallback!=null)
                     mIHomeCallback.onNetworkError();
             }
         });
