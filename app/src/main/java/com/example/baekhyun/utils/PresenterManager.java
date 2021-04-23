@@ -10,7 +10,7 @@ import com.example.baekhyun.presenter.Impl.TicketPresenterImpl;
 import com.example.baekhyun.presenter.IsearchPresenter;
 
 public class PresenterManager {
-    private static final PresenterManager oneInstance=new PresenterManager();
+    private static final PresenterManager oneInstance = new PresenterManager();
     private final ISelectPagePresenter mSelectPresenter;
     private final ISepicialPresenter mSpecialPresenter;
     private final IsearchPresenter mSearchpresenter;
@@ -32,13 +32,15 @@ public class PresenterManager {
     }
 
     private final TicketPresenterImpl mTicketPresenter;
-    public static PresenterManager getInstance(){
+
+    public static PresenterManager getInstance() {
         return oneInstance;
     }
-    private PresenterManager(){
+
+    private PresenterManager() {
         mTicketPresenter = new TicketPresenterImpl();
         mSelectPresenter = new SelectPresenterImpl();
-        mSpecialPresenter=new ISpecialPresenterImpl();
+        mSpecialPresenter = new ISpecialPresenterImpl();
         mSearchpresenter = new SearchPresenterImpl();
     }
 }

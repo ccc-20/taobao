@@ -10,10 +10,10 @@ public class BaseApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        appContext=getBaseContext();
+        appContext = getBaseContext();
     }
 
-    public static Context getAppContext(){
+    public static Context getAppContext() {
         return appContext;
     }
 }

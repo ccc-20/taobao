@@ -35,8 +35,8 @@
             android:id="@+id/search_history_view"
             android:layout_width="match_parent"
             android:layout_height="30dp"
-            sob:myhright="10dp"
-            sob:mywidth="10dp" />
+            sob:myHeight="10dp"
+            sob:myWidth="10dp" />
 
 
     </LinearLayout>
@@ -65,8 +65,8 @@
             android:id="@+id/search_recommend_view"
             android:layout_width="match_parent"
             android:layout_height="30dp"
-            sob:myhright="10dp"
-            sob:mywidth="10dp" />
+            sob:myHeight="10dp"
+            sob:myWidth="10dp" />
 
 
     </LinearLayout>

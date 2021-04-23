@@ -10,15 +10,15 @@ import androidx.annotation.Nullable;
 import com.example.baekhyun.R;
 
 public class LoadingView extends androidx.appcompat.widget.AppCompatImageView {
-    private float mDegree=0;
-    private boolean mNeed=true;
+    private float mDegree = 0;
+    private boolean mNeed = true;
 
     public LoadingView(Context context) {
-        this(context,null);
+        this(context, null);
     }
 
     public LoadingView(Context context, @Nullable AttributeSet attrs) {
-        this(context, attrs,0);
+        this(context, attrs, 0);
     }
 
     public LoadingView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
@@ -29,7 +29,7 @@ public class LoadingView extends androidx.appcompat.widget.AppCompatImageView {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        mNeed=true;
+        mNeed = true;
         startRotate();
     }
 
@@ -57,12 +57,12 @@ public class LoadingView extends androidx.appcompat.widget.AppCompatImageView {
     }
 
     private void stopRotate() {
-        mNeed=false;
+        mNeed = false;
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-        canvas.rotate(mDegree,getWidth()/2,getHeight()/2);
+        canvas.rotate(mDegree, getWidth() / 2, getHeight() / 2);
         super.onDraw(canvas);
     }
 }

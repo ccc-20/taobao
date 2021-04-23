@@ -17,36 +17,33 @@ import retrofit2.http.HTTP;
 
 public class HomePresenterImpl implements IHomePresenter {
     private IHomeCallback mIHomeCallback;
+
     @Override
     public void getCategory() {
-        if(mIHomeCallback!=null){
+        if (mIHomeCallback != null) {
             mIHomeCallback.onLoading();
         }
-        Retrofit retrofit= RetrofitManager.getInstance().getRetrofit();
-        Api api=retrofit.create(Api.class);
-        Call<CateGoryies> task=api.getCategories();
+        Retrofit retrofit = RetrofitManager.getInstance().getRetrofit();
+        Api api = retrofit.create(Api.class);
+        Call<CateGoryies> task = api.getCategories();
         task.enqueue(new Callback<CateGoryies>() {
             @Override
             public void onResponse(Call<CateGoryies> call, Response<CateGoryies> response) {
-                int code=response.code();
-                LogUtils.d(HomePresenterImpl.this,"request-->"+code);
-                if (code== HttpURLConnection.HTTP_OK) {
-                    CateGoryies cateGoryies=response.body();
-                    if (mIHomeCallback!=null) {
+                int code = response.code();
+                if (code == HttpURLConnection.HTTP_OK) {
+                    CateGoryies cateGoryies = response.body();
+                    if (mIHomeCallback != null) {
                         mIHomeCallback.OnCategoryLoad(cateGoryies);
                     }
-                    LogUtils.d(HomePresenterImpl.this,"请求成功-->"+cateGoryies.toString());
-                }else{
-                    LogUtils.i(HomePresenterImpl.this,"请求失败-->");
-                    if(mIHomeCallback!=null)
+                } else {
+                    if (mIHomeCallback != null)
                         mIHomeCallback.onNetworkError();
                 }
             }
 
             @Override
             public void onFailure(Call<CateGoryies> call, Throwable t) {
-                LogUtils.e(HomePresenterImpl.this,"请求错误-->");
-                if(mIHomeCallback!=null)
+                if (mIHomeCallback != null)
                     mIHomeCallback.onNetworkError();
             }
         });
@@ -55,11 +52,11 @@ public class HomePresenterImpl implements IHomePresenter {
 
     @Override
     public void registerViewCallback(IHomeCallback callback) {
-        mIHomeCallback=callback;
+        mIHomeCallback = callback;
     }
 
     @Override
     public void unregisterViewCallback(IHomeCallback callback) {
-        mIHomeCallback=null;
+        mIHomeCallback = null;
     }
 }

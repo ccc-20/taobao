@@ -22,41 +22,44 @@ import retrofit2.Retrofit;
 
 public class CategoryPagePresenterImpl implements ICategoryPagerPresenter {
 
-    private Map<Integer ,Integer> hashMap=new HashMap<>();
-    public static final int DEFAULT_PAGE=1;
+    private Map<Integer, Integer> hashMap = new HashMap<>();
+    public static final int DEFAULT_PAGE = 1;
     private Integer mCurrentPage;
 
-    private CategoryPagePresenterImpl(){
+    private CategoryPagePresenterImpl() {
 
     }
-    private static ICategoryPagerPresenter sInstance=null;
-    public static ICategoryPagerPresenter getInstance(){
-        if(sInstance==null){
-            sInstance=new CategoryPagePresenterImpl();
+
+    private static ICategoryPagerPresenter sInstance = null;
+
+    public static ICategoryPagerPresenter getInstance() {
+        if (sInstance == null) {
+            sInstance = new CategoryPagePresenterImpl();
         }
         return sInstance;
     }
+
     @Override
     public void getContentCategoriesById(int id) {
-        for(ICategoryCallback callback:callbacks){
-            if (callback.getCategoryId()==id) {
+        for (ICategoryCallback callback : callbacks) {
+            if (callback.getCategoryId() == id) {
                 callback.onLoading();
             }
         }
-        Integer page=hashMap.get(id);
-        if(page==null) {
-            page=DEFAULT_PAGE;
+        Integer page = hashMap.get(id);
+        if (page == null) {
+            page = DEFAULT_PAGE;
             hashMap.put(id, DEFAULT_PAGE);
         }
         Call<HomePagerContent> task = createTask(id, page);
         task.enqueue(new Callback<HomePagerContent>() {
             @Override
             public void onResponse(Call<HomePagerContent> call, Response<HomePagerContent> response) {
-                int code=response.code();
-                if (code== HttpURLConnection.HTTP_OK) {
+                int code = response.code();
+                if (code == HttpURLConnection.HTTP_OK) {
                     HomePagerContent pagerContent = response.body();
-                    handlePageContentResult(pagerContent,id);
-                }else{
+                    handlePageContentResult(pagerContent, id);
+                } else {
                     handleNetworkError(id);
                 }
             }
@@ -69,22 +72,22 @@ public class CategoryPagePresenterImpl implements ICategoryPagerPresenter {
     }
 
     private Call<HomePagerContent> createTask(int id, Integer page) {
-        String url= UrlUtiles.createHomePagerUrl(id,page);
-        Retrofit retrofit= RetrofitManager.getInstance().getRetrofit();
-        Api api=retrofit.create(Api.class);
+        String url = UrlUtiles.createHomePagerUrl(id, page);
+        Retrofit retrofit = RetrofitManager.getInstance().getRetrofit();
+        Api api = retrofit.create(Api.class);
         return api.getHomePagerContent(url);
     }
 
     private void handleNetworkError(int id) {
-        for(ICategoryCallback callback:callbacks){
-            if (callback.getCategoryId()==id) {
+        for (ICategoryCallback callback : callbacks) {
+            if (callback.getCategoryId() == id) {
                 callback.onNetworkError();
             }
         }
     }
 
-    private void handlePageContentResult(HomePagerContent pagerContent,int id) {
-        for(ICategoryCallback calback :callbacks) {
+    private void handlePageContentResult(HomePagerContent pagerContent, int id) {
+        for (ICategoryCallback calback : callbacks) {
             if (calback.getCategoryId() == id) {
                 if (pagerContent == null || pagerContent.getData().size() == 0) {
                     calback.onEmpty();
@@ -98,19 +101,18 @@ public class CategoryPagePresenterImpl implements ICategoryPagerPresenter {
     @Override
     public void loadMore(int id) {
         mCurrentPage = hashMap.get(id);
-        if(mCurrentPage ==null)
-            mCurrentPage =1;
+        if (mCurrentPage == null)
+            mCurrentPage = 1;
         mCurrentPage++;
-        //TODO:
-        hashMap.put(id,mCurrentPage);
+        hashMap.put(id, mCurrentPage);
         Call<HomePagerContent> task = createTask(id, mCurrentPage);
         task.enqueue(new Callback<HomePagerContent>() {
             @Override
             public void onResponse(Call<HomePagerContent> call, Response<HomePagerContent> response) {
-                int code=response.code();
-                if (code== HttpURLConnection.HTTP_OK) {
+                int code = response.code();
+                if (code == HttpURLConnection.HTTP_OK) {
                     HomePagerContent body = response.body();
-                    handleLoadmoreResult(body,id);
+                    handleLoadmoreResult(body, id);
                 }
             }
 
@@ -124,10 +126,10 @@ public class CategoryPagePresenterImpl implements ICategoryPagerPresenter {
 
     private void handleLoadmoreResult(HomePagerContent body, int id) {
         for (ICategoryCallback callback : callbacks) {
-            if (callback.getCategoryId()==id) {
-                if (body==null||body.getData().size()== 0) {
+            if (callback.getCategoryId() == id) {
+                if (body == null || body.getData().size() == 0) {
                     callback.onLoadMoreEmpty();
-                }else {
+                } else {
                     callback.onLoadMoreLoaded(body.getData());
                 }
             }
@@ -136,20 +138,16 @@ public class CategoryPagePresenterImpl implements ICategoryPagerPresenter {
 
     private void handleLoadMoreError(int id) {
         mCurrentPage--;
-        hashMap.put(id,mCurrentPage);
+        hashMap.put(id, mCurrentPage);
         for (ICategoryCallback callback : callbacks) {
-            if (callback.getCategoryId()==id) {
+            if (callback.getCategoryId() == id) {
                 callback.onLoadMoreError();
             }
         }
     }
 
-    @Override
-    public void reload(int id) {
+    private List<ICategoryCallback> callbacks = new ArrayList<>();
 
-    }
-
-    private List<ICategoryCallback> callbacks=new ArrayList<>();
     @Override
     public void registerViewCallback(ICategoryCallback callback) {
         if (!callbacks.contains(callback)) {

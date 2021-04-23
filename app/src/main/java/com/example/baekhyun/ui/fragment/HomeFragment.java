@@ -30,6 +30,7 @@ public class HomeFragment extends BaseFragment implements IHomeCallback {
     private HomePagerAdapter mHomePagerAdapter;
     private LinearLayout mLinearLayout;
     private EditText mEditText;
+
     @Override
     public int getRootResId() {
         return R.layout.fragment_home;
@@ -37,25 +38,25 @@ public class HomeFragment extends BaseFragment implements IHomeCallback {
 
     @Override
     protected void initPresenter() {
-        mHomePresenter=new HomePresenterImpl();
+        mHomePresenter = new HomePresenterImpl();
         mHomePresenter.registerViewCallback(this);
     }
 
     @Override
     protected void initView(View view) {
-        mTabLayout=view.findViewById(R.id.home_indicator);
-        mViewPager=view.findViewById(R.id.home_pager);
-        mLinearLayout=view.findViewById(R.id.network_error);
-        mEditText=view.findViewById(R.id.home_search);
+        mTabLayout = view.findViewById(R.id.home_indicator);
+        mViewPager = view.findViewById(R.id.home_pager);
+        mLinearLayout = view.findViewById(R.id.network_error);
+        mEditText = view.findViewById(R.id.home_search);
         mLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mHomePresenter!=null)
-                mHomePresenter.getCategory();
+                if (mHomePresenter != null)
+                    mHomePresenter.getCategory();
             }
         });
         mTabLayout.setupWithViewPager(mViewPager);
-        mHomePagerAdapter=new HomePagerAdapter(getChildFragmentManager());
+        mHomePagerAdapter = new HomePagerAdapter(getChildFragmentManager());
         mViewPager.setAdapter(mHomePagerAdapter);
         //String ss=mEditText.getText().toString();
         //LogUtils.d(HomeFragment.this,ss);
@@ -63,7 +64,7 @@ public class HomeFragment extends BaseFragment implements IHomeCallback {
             @Override
             public void onClick(View v) {
                 FragmentActivity activity = getActivity();
-                if(activity instanceof MainActivity){
+                if (activity instanceof MainActivity) {
                     ((MainActivity) activity).switchSearch();
                 }
             }
@@ -79,14 +80,14 @@ public class HomeFragment extends BaseFragment implements IHomeCallback {
     @Override
     public void OnCategoryLoad(CateGoryies cateGoryies) {
         setUpState(State.SUCCESS);
-        if (mHomePagerAdapter!=null) {
+        if (mHomePagerAdapter != null) {
             mHomePagerAdapter.setCategories(cateGoryies);
         }
     }
 
     @Override
     protected View loadRootView(LayoutInflater inflater, ViewGroup container) {
-        return inflater.inflate(R.layout.base_home_fragment_layout,container,false);
+        return inflater.inflate(R.layout.base_home_fragment_layout, container, false);
     }
 
     @Override
@@ -96,17 +97,17 @@ public class HomeFragment extends BaseFragment implements IHomeCallback {
 
     @Override
     public void onLoading() {
-    setUpState(State.LOADING);
+        setUpState(State.LOADING);
     }
 
     @Override
     public void onEmpty() {
-    setUpState(State.EMPTY);
+        setUpState(State.EMPTY);
     }
 
     @Override
     protected void release() {
-        if (mHomePresenter!=null) {
+        if (mHomePresenter != null) {
             mHomePresenter.unregisterViewCallback(this);
         }
     }

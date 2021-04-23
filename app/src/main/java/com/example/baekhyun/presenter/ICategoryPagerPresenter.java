@@ -11,6 +11,4 @@ public interface ICategoryPagerPresenter extends IBasePresenter<ICategoryCallbac
 
     void loadMore(int id);
 
-    void reload(int id);
-
 }

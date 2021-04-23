@@ -1,11 +1,5 @@
 package com.example.baekhyun.ui.adapter;
 
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.Intent;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,13 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.baekhyun.R;
-import com.example.baekhyun.base.BaseApplication;
 import com.example.baekhyun.model.domain.SelectCategory;
-import com.example.baekhyun.presenter.ITicketPresenter;
-import com.example.baekhyun.ui.activity.TicketActivity;
 import com.example.baekhyun.utils.Constant;
-import com.example.baekhyun.utils.LogUtils;
-import com.example.baekhyun.utils.PresenterManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,13 +20,11 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
-import static com.alipay.sdk.app.statistic.c.m;
 
 public class RightAdapter extends RecyclerView.Adapter<RightAdapter.hodler> {
 
-    private List<SelectCategory.DataBean.TbkDgOptimusMaterialResponseBean.ResultListBean.MapDataBean> mlist=new ArrayList<>();
-    private onItemClick mListener=null;
+    private List<SelectCategory.DataBean.TbkDgOptimusMaterialResponseBean.ResultListBean.MapDataBean> mlist = new ArrayList<>();
+    private onItemClick mListener = null;
 
 
     @NonNull
@@ -54,7 +41,7 @@ public class RightAdapter extends RecyclerView.Adapter<RightAdapter.hodler> {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mListener != null&&contntDate.getCoupon_click_url()!=null) {
+                if (mListener != null && contntDate.getCoupon_click_url() != null) {
                     mListener.onTicketClick(contntDate);
                 }
             }
@@ -68,8 +55,7 @@ public class RightAdapter extends RecyclerView.Adapter<RightAdapter.hodler> {
     }
 
     public void setDate(SelectCategory content) {
-        if(content.getCode()== Constant.SUCCESS_CODE){
-            //content.getData().getTbk_uatm_favorites_item_get_response().getResults().getUatm_tbk_item();
+        if (content.getCode() == Constant.SUCCESS_CODE) {
             List<SelectCategory.DataBean.TbkDgOptimusMaterialResponseBean.ResultListBean.MapDataBean> map_data = content.getData().getTbk_dg_optimus_material_response().getResult_list().getMap_data();
             this.mlist.clear();
             this.mlist.addAll(map_data);
@@ -95,12 +81,11 @@ public class RightAdapter extends RecyclerView.Adapter<RightAdapter.hodler> {
 
         public hodler(@NonNull View itemView) {
             super(itemView);
-            ButterKnife.bind(this,itemView);
+            ButterKnife.bind(this, itemView);
         }
 
         public void setDate(SelectCategory.DataBean.TbkDgOptimusMaterialResponseBean.ResultListBean.MapDataBean contntDate) {
             mtitle.setText(contntDate.getTitle());
-            //LogUtils.d(RightAdapter.this,contntDate.getPict_url());
             Glide.with(itemView.getContext()).load("https:" + contntDate.getPict_url()).into(mcover);
             if (contntDate.getCoupon_amount() == 0) {
                 moffprice.setText("啊喔 你来晚啦~");
@@ -115,10 +100,11 @@ public class RightAdapter extends RecyclerView.Adapter<RightAdapter.hodler> {
         }
     }
 
-    public void setListener(onItemClick click){
-        this.mListener=click;
+    public void setListener(onItemClick click) {
+        this.mListener = click;
     }
-    public interface onItemClick{
+
+    public interface onItemClick {
         void onTicketClick(SelectCategory.DataBean.TbkDgOptimusMaterialResponseBean.ResultListBean.MapDataBean mapDataBean);
     }
 }

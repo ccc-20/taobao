@@ -45,7 +45,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class SelectFragment extends BaseFragment implements ISelelctCallback, LeftAdapter.onLeftListener, RightAdapter.onItemClick , ITicketCallback {
+public class SelectFragment extends BaseFragment implements ISelelctCallback, LeftAdapter.onLeftListener, RightAdapter.onItemClick, ITicketCallback {
 
     private ISelectPagePresenter mSelectPresenter;
     private RecyclerView mleft;
@@ -64,15 +64,15 @@ public class SelectFragment extends BaseFragment implements ISelelctCallback, Le
 
     @Override
     protected View loadRootView(LayoutInflater inflater, ViewGroup container) {
-        return inflater.inflate(R.layout.base_other_title,container,false);
+        return inflater.inflate(R.layout.base_other_title, container, false);
     }
 
     @Override
     protected void initView(View view) {
-        title=view.findViewById(R.id.text_title);
+        title = view.findViewById(R.id.text_title);
         title.setText("精选宝贝");
-        mleft=view.findViewById(R.id.left_category_list);
-        mright=view.findViewById(R.id.right_content_list);
+        mleft = view.findViewById(R.id.left_category_list);
+        mright = view.findViewById(R.id.right_content_list);
         mleft.setLayoutManager(new LinearLayoutManager(getContext()));
         mMleftAdapter = new LeftAdapter();
         mleft.setAdapter(mMleftAdapter);
@@ -82,13 +82,13 @@ public class SelectFragment extends BaseFragment implements ISelelctCallback, Le
         mright.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
             public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
-                outRect.top=10;
-                outRect.bottom=10;
-                outRect.left=10;
-                outRect.right=5;
+                outRect.top = 10;
+                outRect.bottom = 10;
+                outRect.left = 10;
+                outRect.right = 5;
             }
         });
-        mLinearLayout=view.findViewById(R.id.network_error);
+        mLinearLayout = view.findViewById(R.id.network_error);
         setUpState(State.SUCCESS);
     }
 
@@ -127,7 +127,7 @@ public class SelectFragment extends BaseFragment implements ISelelctCallback, Le
 
     @Override
     public void onNetworkError() {
-    setUpState(State.ERROR);
+        setUpState(State.ERROR);
         mLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -140,7 +140,7 @@ public class SelectFragment extends BaseFragment implements ISelelctCallback, Le
 
     @Override
     public void onLoading() {
-    setUpState(State.LOADING);
+        setUpState(State.LOADING);
     }
 
     @Override
@@ -155,20 +155,20 @@ public class SelectFragment extends BaseFragment implements ISelelctCallback, Le
 
     @Override
     public void onTicketClick(SelectCategory.DataBean.TbkDgOptimusMaterialResponseBean.ResultListBean.MapDataBean mapDataBean) {
-        String url="https:"+mapDataBean.getCoupon_click_url();
+        String url = "https:" + mapDataBean.getCoupon_click_url();
         //String detailurl="https:"+mapDataBean.getClick_url();
-        Retrofit retrofit= RetrofitManager.getInstance().getRetrofit();
+        Retrofit retrofit = RetrofitManager.getInstance().getRetrofit();
         Api api = retrofit.create(Api.class);
-            mTicketParams = new TicketParams(url, mapDataBean.getTitle());
+        mTicketParams = new TicketParams(url, mapDataBean.getTitle());
         Call<TicketResult> task = api.getTicket(mTicketParams);
         task.enqueue(new Callback<TicketResult>() {
             @Override
             public void onResponse(Call<TicketResult> call, Response<TicketResult> response) {
-                int code=response.code();
-                if (code== HttpURLConnection.HTTP_OK) {
+                int code = response.code();
+                if (code == HttpURLConnection.HTTP_OK) {
                     mBody = response.body();
-                    TiacketLoaded("",mBody);
-                }else{
+                    TiacketLoaded("", mBody);
+                } else {
                     //ToastUtil.getToast("哎呀 这个没有优惠券哦");
                     onNetworkError();
                 }
@@ -182,15 +182,14 @@ public class SelectFragment extends BaseFragment implements ISelelctCallback, Le
     }
 
 
-
     @Override
     public void TiacketLoaded(String cover, TicketResult result) {
         ClipboardManager cm = (ClipboardManager) BaseApplication.getAppContext().getSystemService(Context.CLIPBOARD_SERVICE);
         ClipData clipData = ClipData.newPlainText("", result.getData().getTbk_tpwd_create_response().getData().getModel());
         //LogUtils.d(this,url);
         cm.setPrimaryClip(clipData);
-        Intent taobao=new Intent();
-        ComponentName componentName=new ComponentName("com.taobao.taobao","com.taobao.tao.TBMainActivity");
+        Intent taobao = new Intent();
+        ComponentName componentName = new ComponentName("com.taobao.taobao", "com.taobao.tao.TBMainActivity");
         taobao.setComponent(componentName);
         startActivity(taobao);
     }

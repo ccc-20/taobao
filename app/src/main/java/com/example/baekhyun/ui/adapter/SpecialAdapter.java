@@ -18,9 +18,9 @@ import com.example.baekhyun.utils.UrlUtiles;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SpecialAdapter extends RecyclerView.Adapter<SpecialAdapter.hodler>{
-    private List<SpecialContent.DataBean.TbkDgOptimusMaterialResponseBean.ResultListBean.MapDataBean> data=new ArrayList<>();
-    private onSpecialContent mListener=null;
+public class SpecialAdapter extends RecyclerView.Adapter<SpecialAdapter.hodler> {
+    private List<SpecialContent.DataBean.TbkDgOptimusMaterialResponseBean.ResultListBean.MapDataBean> data = new ArrayList<>();
+    private onSpecialContent mListener = null;
 
     @NonNull
     @Override
@@ -47,7 +47,7 @@ public class SpecialAdapter extends RecyclerView.Adapter<SpecialAdapter.hodler>{
         return data.size();
     }
 
-    public void  setDate(SpecialContent content) {
+    public void setDate(SpecialContent content) {
         this.data.clear();
         this.data.addAll(content.getData().getTbk_dg_optimus_material_response().getResult_list().getMap_data());
         notifyDataSetChanged();
@@ -55,20 +55,21 @@ public class SpecialAdapter extends RecyclerView.Adapter<SpecialAdapter.hodler>{
 
     public void onMoreLoaded(SpecialContent content) {
         List<SpecialContent.DataBean.TbkDgOptimusMaterialResponseBean.ResultListBean.MapDataBean> map_data = content.getData().getTbk_dg_optimus_material_response().getResult_list().getMap_data();
-        int old=data.size();
+        int old = data.size();
         this.data.addAll(map_data);
-        notifyItemRangeChanged(old,map_data.size());
+        notifyItemRangeChanged(old, map_data.size());
     }
 
     public class hodler extends RecyclerView.ViewHolder {
         private ImageView mImageView;
         private TextView mTextView;
-        private  TextView mprice;
+        private TextView mprice;
+
         public hodler(@NonNull View itemView) {
             super(itemView);
-            mImageView=itemView.findViewById(R.id.on_sell_cover);
-            mTextView=itemView.findViewById(R.id.on_sell_content_title_tv);
-            mprice=itemView.findViewById(R.id.on_sell_off_prise_tv);
+            mImageView = itemView.findViewById(R.id.on_sell_cover);
+            mTextView = itemView.findViewById(R.id.on_sell_content_title_tv);
+            mprice = itemView.findViewById(R.id.on_sell_off_prise_tv);
 
         }
 
@@ -78,15 +79,16 @@ public class SpecialAdapter extends RecyclerView.Adapter<SpecialAdapter.hodler>{
             String coverPath = UrlUtiles.getCoverPath(mapDataBean.getPict_url());
             Glide.with(mImageView.getContext()).load(coverPath).into(mImageView);
             float v = Float.parseFloat(mapDataBean.getZk_final_price());
-             float v1 = (float) v - mapDataBean.getCoupon_amount();
-             mprice.setText("券后价："+String.format("%.2f",v1));
+            float v1 = (float) v - mapDataBean.getCoupon_amount();
+            mprice.setText("券后价：" + String.format("%.2f", v1));
         }
     }
 
-    public interface onSpecialContent{
+    public interface onSpecialContent {
         void Specialclick(SpecialContent.DataBean.TbkDgOptimusMaterialResponseBean.ResultListBean.MapDataBean mapDataBean);
     }
-    public void setSpecialListener(onSpecialContent listener){
-        this.mListener=listener;
+
+    public void setSpecialListener(onSpecialContent listener) {
+        this.mListener = listener;
     }
 }

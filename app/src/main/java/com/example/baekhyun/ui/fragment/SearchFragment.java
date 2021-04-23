@@ -53,6 +53,7 @@ public class SearchFragment extends BaseFragment implements ISearchCallback, Sea
     private EditText mEditText;
     private ImageView mdele;
     private ImageView back;
+
     @Override
     public int getRootResId() {
         return R.layout.fragment_search;
@@ -60,7 +61,7 @@ public class SearchFragment extends BaseFragment implements ISearchCallback, Sea
 
     @Override
     protected View loadRootView(LayoutInflater inflater, ViewGroup container) {
-        return inflater.inflate(R.layout.base_search_title,container,false);
+        return inflater.inflate(R.layout.base_search_title, container, false);
     }
 
     @Override
@@ -69,7 +70,6 @@ public class SearchFragment extends BaseFragment implements ISearchCallback, Sea
         mSearchpresenter.registerViewCallback(this);
         mSearchpresenter.getRecommends();
         mSearchpresenter.getHistories();
-        //mSearchpresenter.doSearch(mEditText.getText().toString());
     }
 
     @Override
@@ -80,23 +80,23 @@ public class SearchFragment extends BaseFragment implements ISearchCallback, Sea
     @Override
     protected void initView(View view) {
         setUpState(State.SUCCESS);
-        mMyTextView=view.findViewById(R.id.search_history_view);
-        mRecommendTextView=view.findViewById(R.id.search_recommend_view);
-        msousuo=view.findViewById(R.id.search_history_container);
-        mtuijian=view.findViewById(R.id.search_recommend_container);
-        mdel=view.findViewById(R.id.search_history_delete);
-        mRecyclerView=view.findViewById(R.id.search_result_list);
+        mMyTextView = view.findViewById(R.id.search_history_view);
+        mRecommendTextView = view.findViewById(R.id.search_recommend_view);
+        msousuo = view.findViewById(R.id.search_history_container);
+        mtuijian = view.findViewById(R.id.search_recommend_container);
+        mdel = view.findViewById(R.id.search_history_delete);
+        mRecyclerView = view.findViewById(R.id.search_result_list);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mSearchAdapter = new SearchAdapter();
         mRecyclerView.setAdapter(mSearchAdapter);
-        mRefreshLayout=view.findViewById(R.id.search_result_container);
+        mRefreshLayout = view.findViewById(R.id.search_result_container);
         mRefreshLayout.setEnableLoadmore(true);
         mRefreshLayout.setEnableRefresh(false);
-        mLinearLayout=view.findViewById(R.id.network_error);
-        msearch=view.findViewById(R.id.scan);
-        mdele=view.findViewById(R.id.chacha);
-        mEditText=view.findViewById(R.id.sousuo);
-        back=view.findViewById(R.id.back);
+        mLinearLayout = view.findViewById(R.id.network_error);
+        msearch = view.findViewById(R.id.scan);
+        mdele = view.findViewById(R.id.chacha);
+        mEditText = view.findViewById(R.id.sousuo);
+        back = view.findViewById(R.id.back);
     }
 
     @Override
@@ -110,7 +110,7 @@ public class SearchFragment extends BaseFragment implements ISearchCallback, Sea
         mRefreshLayout.setOnRefreshListener(new RefreshListenerAdapter() {
             @Override
             public void onLoadMore(TwinklingRefreshLayout refreshLayout) {
-                if(mSearchpresenter!=null){
+                if (mSearchpresenter != null) {
                     mSearchpresenter.loadMore();
                 }
             }
@@ -118,7 +118,7 @@ public class SearchFragment extends BaseFragment implements ISearchCallback, Sea
         mLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mSearchpresenter!=null)
+                if (mSearchpresenter != null)
                     mSearchpresenter.reSearch();
             }
         });
@@ -126,12 +126,9 @@ public class SearchFragment extends BaseFragment implements ISearchCallback, Sea
         mEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if(actionId== EditorInfo.IME_ACTION_SEARCH&&mSearchpresenter!=null){
+                if (actionId == EditorInfo.IME_ACTION_SEARCH && mSearchpresenter != null) {
                     mSearchpresenter.doSearch(mEditText.getText().toString().trim());
                     mRecyclerView.setVisibility(View.VISIBLE);
-                    //mEditText.setText("");
-                    //mdele.setVisibility(View.VISIBLE);
-                    //msearch.setText("取消");
                 }
                 return false;
             }
@@ -144,10 +141,10 @@ public class SearchFragment extends BaseFragment implements ISearchCallback, Sea
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(s.toString().length()>0){
+                if (s.toString().length() > 0) {
                     mdele.setVisibility(View.VISIBLE);
                     msearch.setText("搜索");
-                }else {
+                } else {
                     mdele.setVisibility(View.GONE);
                     msearch.setText("取消");
                 }
@@ -168,14 +165,14 @@ public class SearchFragment extends BaseFragment implements ISearchCallback, Sea
         msearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mEditText.getText().toString().length()!=0){
+                if (mEditText.getText().toString().length() != 0) {
                     mSearchpresenter.doSearch(mEditText.getText().toString().trim());
                     back.setVisibility(View.VISIBLE);
                     mRecyclerView.setVisibility(View.VISIBLE);
-                    KeyBorad.hide(getContext(),v);
-                }else {
+                    KeyBorad.hide(getContext(), v);
+                } else {
                     back.setVisibility(View.GONE);
-                    KeyBorad.hide(getContext(),v);
+                    KeyBorad.hide(getContext(), v);
                 }
             }
         });
@@ -185,11 +182,11 @@ public class SearchFragment extends BaseFragment implements ISearchCallback, Sea
                 mRecyclerView.scrollToPosition(0);
                 mEditText.setText(text);
                 mEditText.requestFocus();
-                mEditText.setSelection(text.length(),text.length());
+                mEditText.setSelection(text.length(), text.length());
                 mSearchpresenter.doSearch(text);
                 back.setVisibility(View.VISIBLE);
                 mRecyclerView.setVisibility(View.VISIBLE);
-                KeyBorad.hide(getContext(),getView());
+                KeyBorad.hide(getContext(), getView());
             }
         });
         mRecommendTextView.setOnMytextListener(new MyTextView.onMytextListener() {
@@ -198,11 +195,11 @@ public class SearchFragment extends BaseFragment implements ISearchCallback, Sea
                 mRecyclerView.scrollToPosition(0);
                 mEditText.setText(text);
                 mEditText.requestFocus();
-                mEditText.setSelection(text.length(),text.length());
+                mEditText.setSelection(text.length(), text.length());
                 mSearchpresenter.doSearch(text);
                 back.setVisibility(View.VISIBLE);
                 mRecyclerView.setVisibility(View.VISIBLE);
-                KeyBorad.hide(getContext(),getView());
+                KeyBorad.hide(getContext(), getView());
             }
         });
         back.setOnClickListener(new View.OnClickListener() {
@@ -210,7 +207,7 @@ public class SearchFragment extends BaseFragment implements ISearchCallback, Sea
             public void onClick(View v) {
                 mEditText.setText("");
                 switchToHistory();
-                KeyBorad.hide(getContext(),getView());
+                KeyBorad.hide(getContext(), getView());
             }
         });
     }
@@ -218,22 +215,21 @@ public class SearchFragment extends BaseFragment implements ISearchCallback, Sea
     private void switchToHistory() {
         mSearchpresenter.getHistories();
         back.setVisibility(View.GONE);
-        if(mMyTextView.getsize()!=0){
+        if (mMyTextView.getsize() != 0) {
             msousuo.setVisibility(View.VISIBLE);
             mtuijian.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             msousuo.setVisibility(View.GONE);
             mtuijian.setVisibility(View.VISIBLE);
         }
         mRecyclerView.setVisibility(View.GONE);
-        //mSearchpresenter.doSearch(mEditText.getText().toString());
     }
 
     @Override
     public void onHistoriesLoaded(Histroies list) {
-        if(list==null||list.getList().size()==0){
+        if (list == null || list.getList().size() == 0) {
             msousuo.setVisibility(View.GONE);
-        }else {
+        } else {
             msousuo.setVisibility(View.VISIBLE);
             mMyTextView.setList(list.getList());
         }
@@ -252,7 +248,7 @@ public class SearchFragment extends BaseFragment implements ISearchCallback, Sea
         mRefreshLayout.setVisibility(View.VISIBLE);
         try {
             mSearchAdapter.setData(result);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             setUpState(State.EMPTY);
         }
@@ -279,13 +275,13 @@ public class SearchFragment extends BaseFragment implements ISearchCallback, Sea
 
     @Override
     public void onRecommed(List<Recommed.DataBean> list) {
-        List<String> textlist=new ArrayList<>();
+        List<String> textlist = new ArrayList<>();
         for (Recommed.DataBean dataBean : list) {
             textlist.add(dataBean.getKeyword());
         }
-        if(list==null||list.size()==0){
+        if (list == null || list.size() == 0) {
             mtuijian.setVisibility(View.GONE);
-        }else {
+        } else {
 
             mRecommendTextView.setList(textlist);
             mtuijian.setVisibility(View.VISIBLE);
@@ -304,31 +300,23 @@ public class SearchFragment extends BaseFragment implements ISearchCallback, Sea
 
     @Override
     public void onEmpty() {
-     setUpState(State.EMPTY);
+        setUpState(State.EMPTY);
     }
 
     @Override
     public void OnitemClick(SearchResult.DataBean.TbkDgMaterialOptionalResponseBean.ResultListBean.MapDataBean item) {
         handItemClick(item);
-        //handItemClick(item);
     }
 
     private void handItemClick(SearchResult.DataBean.TbkDgMaterialOptionalResponseBean.ResultListBean.MapDataBean item) {
-        String title=item.getTitle();
-        //这个才是领券的链接！！！！
-        String url=item.getCoupon_share_url();
-        //LogUtils.d(this,url);
-        if(TextUtils.isEmpty(url)){
-            url=item.getUrl();//这是详情界面！！！
+        String title = item.getTitle();
+        String url = item.getCoupon_share_url();
+        if (TextUtils.isEmpty(url)) {
+            url = item.getUrl();//这是详情界面！！！
         }
-        String cover=item.getPict_url();
-        //LogUtils.d(this,title+url+cover);
+        String cover = item.getPict_url();
         ITicketPresenter ticketPresenter = PresenterManager.getInstance().getTicketPresenter();
-        ticketPresenter.getTicket(title,url,cover);
+        ticketPresenter.getTicket(title, url, cover);
         startActivity(new Intent(getContext(), TicketActivity.class));
-    }
-    public void mainDosearch(String text){
-        mEditText.setText(text.trim());
-        mSearchpresenter.doSearch(text.trim());
     }
 }

@@ -28,7 +28,7 @@ import com.example.baekhyun.utils.ToastUtil;
 
 public class TicketActivity extends AppCompatActivity implements ITicketCallback {
     private ITicketPresenter mITicketPresenter;
-    private static boolean HaveTb=false;
+    private static boolean HaveTb = false;
     private ImageView mImageView;
     private EditText mEditText;
     private TextView mTextView;
@@ -46,19 +46,19 @@ public class TicketActivity extends AppCompatActivity implements ITicketCallback
     }
 
     private void initView() {
-        mImageView=findViewById(R.id.ticket_cover);
-        mEditText=findViewById(R.id.ticket_code);
-        mTextView=findViewById(R.id.ticket_copy_or_open_btn);
-        mback=findViewById(R.id.ticket_back_press);
-        mLoadingView=findViewById(R.id.ticket_cover_loading);
-        mretry=findViewById(R.id.ticket_load_retry);
+        mImageView = findViewById(R.id.ticket_cover);
+        mEditText = findViewById(R.id.ticket_code);
+        mTextView = findViewById(R.id.ticket_copy_or_open_btn);
+        mback = findViewById(R.id.ticket_back_press);
+        mLoadingView = findViewById(R.id.ticket_cover_loading);
+        mretry = findViewById(R.id.ticket_load_retry);
+        mTextView.setText(HaveTb ? "领券吧" : "复制口令");
     }
 
-    private void initEvent(){
+    private void initEvent() {
         mback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //startActivity(new Intent(TicketActivity.this,MainActivity.class));
                 finish();
             }
         });
@@ -66,53 +66,48 @@ public class TicketActivity extends AppCompatActivity implements ITicketCallback
             @Override
             public void onClick(View v) {
                 String text = mEditText.getText().toString().trim();
-                LogUtils.d(this,text);
+                LogUtils.d(this, text);
                 ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
                 ClipData clipData = ClipData.newPlainText("", text);
                 cm.setPrimaryClip(clipData);
-                if(HaveTb){
-                    Intent taobao=new Intent();
-                    //taobao.setAction("android.intent.action.MAIN");
-                    //taobao.addCategory("android.intent.category.LAUNCHER");
-                    //com.taobao.taobao/com.taobao.tao.TBMainActivity
-                    ComponentName componentName=new ComponentName("com.taobao.taobao","com.taobao.tao.TBMainActivity");
+                if (HaveTb) {
+                    Intent taobao = new Intent();
+                    ComponentName componentName = new ComponentName("com.taobao.taobao", "com.taobao.tao.TBMainActivity");
                     taobao.setComponent(componentName);
                     startActivity(taobao);
-
-                }else {
+                } else {
                     ToastUtil.getToast("口令复制成功（๑>\u0602<๑）");
                 }
             }
         });
     }
-    public void  initPresenter(){
-      mITicketPresenter = PresenterManager.getInstance().getTicketPresenter();
-      if(mITicketPresenter!=null){
-      mITicketPresenter.registerViewCallback(this);
 
-      PackageManager pm=getPackageManager();
-          try {
-              PackageInfo packageInfo = pm.getPackageInfo("com.taobao.taobao", PackageManager.MATCH_UNINSTALLED_PACKAGES);
-              HaveTb=packageInfo!=null;
-          } catch (PackageManager.NameNotFoundException e) {
-              e.printStackTrace();
-              HaveTb=false;
-          }
-         // mTextView.setText(HaveTb?"领券吧":"复制口令");
-      }
+    public void initPresenter() {
+        mITicketPresenter = PresenterManager.getInstance().getTicketPresenter();
+        if (mITicketPresenter != null) {
+            mITicketPresenter.registerViewCallback(this);
+            PackageManager pm = getPackageManager();
+            try {
+                PackageInfo packageInfo = pm.getPackageInfo("com.taobao.taobao", PackageManager.MATCH_UNINSTALLED_PACKAGES);
+                HaveTb = packageInfo != null;
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
+                HaveTb = false;
+            }
+        }
     }
 
     @Override
     public void TiacketLoaded(String cover, TicketResult result) {
-        if(mLoadingView!=null){
+        if (mLoadingView != null) {
             mLoadingView.setVisibility(View.GONE);
         }
-        LogUtils.d(TicketActivity.class,cover);
-        if (mImageView != null&&!TextUtils.isEmpty(cover)) {
+        LogUtils.d(TicketActivity.class, cover);
+        if (mImageView != null && !TextUtils.isEmpty(cover)) {
             Glide.with(this).load(cover).into(mImageView);
         }
-        if(mEditText!=null&&result.getData().getTbk_tpwd_create_response().getData().getModel()!=null){
-            LogUtils.d(TicketActivity.this,result.getData().getTbk_tpwd_create_response().getData().getModel());
+        if (mEditText != null && result.getData().getTbk_tpwd_create_response().getData().getModel() != null) {
+            LogUtils.d(TicketActivity.this, result.getData().getTbk_tpwd_create_response().getData().getModel());
             mEditText.setText(result.getData().getTbk_tpwd_create_response().getData().getModel());
 
         }
@@ -120,27 +115,27 @@ public class TicketActivity extends AppCompatActivity implements ITicketCallback
 
     @Override
     public void onNetworkError() {
-        if(mLoadingView!=null){
+        if (mLoadingView != null) {
             mLoadingView.setVisibility(View.VISIBLE);
         }
-        if(mretry!=null){
+        if (mretry != null) {
             mretry.setVisibility(View.VISIBLE);
         }
     }
 
     @Override
     public void onLoading() {
-        if(mretry!=null){
+        if (mretry != null) {
             mretry.setVisibility(View.GONE);
         }
-        if(mLoadingView!=null){
+        if (mLoadingView != null) {
             mLoadingView.setVisibility(View.VISIBLE);
         }
     }
 
     @Override
     public void onEmpty() {
-        if(mLoadingView!=null){
+        if (mLoadingView != null) {
             mLoadingView.setVisibility(View.VISIBLE);
         }
 
@@ -149,7 +144,7 @@ public class TicketActivity extends AppCompatActivity implements ITicketCallback
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (mITicketPresenter!=null) {
+        if (mITicketPresenter != null) {
             mITicketPresenter.unregisterViewCallback(this);
         }
     }

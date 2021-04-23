@@ -9,8 +9,8 @@
     </style>
     
     <declare-styleable name="MyTextView">
-        <attr name="mywidth" format="dimension"/>
-        <attr name="myhright" format="dimension"/>
+        <attr name="myWidth" format="dimension"/>
+        <attr name="myHeight" format="dimension"/>
     </declare-styleable>
 
 

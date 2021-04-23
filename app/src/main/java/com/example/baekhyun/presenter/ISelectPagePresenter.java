@@ -8,6 +8,7 @@ public interface ISelectPagePresenter extends IBasePresenter<ISelelctCallback> {
 
     //获取分类
     void getCategories();
+
     //根据分类id获取内容
     void getContentByid(Selectid.DataBean item);
 

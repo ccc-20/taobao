@@ -16,9 +16,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HomePagerAdapter extends FragmentPagerAdapter {
-    private List<CateGoryies.DataBean> mList=new ArrayList<>();
+    private List<CateGoryies.DataBean> mList = new ArrayList<>();
+
     public HomePagerAdapter(@NonNull FragmentManager fm) {
-        super(fm,BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+        super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
     }
 
     @Nullable
@@ -31,7 +32,7 @@ public class HomePagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         CateGoryies.DataBean dataBean = mList.get(position);
-        HomePagerFragment homePagerFragment=HomePagerFragment.newInstance(dataBean);
+        HomePagerFragment homePagerFragment = HomePagerFragment.newInstance(dataBean);
         return homePagerFragment;
     }
 

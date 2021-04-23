@@ -35,28 +35,32 @@ public class MainActivity extends AppCompatActivity {
         initListener();
     }
 
-    public void switchSearch(){
+    public void switchSearch() {
         mNavigationView.setSelectedItemId(R.id.search);
     }
+
     private void initFragment() {
-        mNavigationView=findViewById(R.id.main_navagtion_bar);
-        mHomeFragment=new HomeFragment();
-        mRedFragment=new RedFragment();
-        mSelectFragment=new SelectFragment();
-        mSearchFragment=new SearchFragment();
-        mfm=getSupportFragmentManager();
+        mNavigationView = findViewById(R.id.main_navagtion_bar);
+        mHomeFragment = new HomeFragment();
+        mRedFragment = new RedFragment();
+        mSelectFragment = new SelectFragment();
+        mSearchFragment = new SearchFragment();
+        mfm = getSupportFragmentManager();
         switchFragment(mHomeFragment);
     }
-    private BaseFragment lastOneFragment=null;
+
+    private BaseFragment lastOneFragment = null;
+
     private void switchFragment(BaseFragment baseFragment) {
-        FragmentTransaction transaction=mfm.beginTransaction();
+        FragmentTransaction transaction = mfm.beginTransaction();
         if (!baseFragment.isAdded()) {
-            transaction.add(R.id.main_page,baseFragment);
-        }else {
+            transaction.add(R.id.main_page, baseFragment);
+        } else {
             transaction.show(baseFragment);
         }
-        if(lastOneFragment!=null&&lastOneFragment!=baseFragment) transaction.hide(lastOneFragment);
-        lastOneFragment=baseFragment;
+        if (lastOneFragment != null && lastOneFragment != baseFragment)
+            transaction.hide(lastOneFragment);
+        lastOneFragment = baseFragment;
         transaction.commit();
     }
 
@@ -64,16 +68,13 @@ public class MainActivity extends AppCompatActivity {
         mNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                if(item.getItemId()==R.id.home) {
+                if (item.getItemId() == R.id.home) {
                     switchFragment(mHomeFragment);
-                }
-                else if(item.getItemId()==R.id.select) {
+                } else if (item.getItemId() == R.id.select) {
                     switchFragment(mSelectFragment);
-                }
-                else if(item.getItemId()==R.id.red) {
+                } else if (item.getItemId() == R.id.red) {
                     switchFragment(mRedFragment);
-                }
-                else if(item.getItemId()==R.id.search) {
+                } else if (item.getItemId() == R.id.search) {
                     switchFragment(mSearchFragment);
                 }
                 return true;

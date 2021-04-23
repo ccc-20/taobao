@@ -16,9 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LeftAdapter extends RecyclerView.Adapter<LeftAdapter.hodler> {
-    private List<Selectid.DataBean> mDataBeans=new ArrayList<>();
-    private int mcurrent=0;
-    private onLeftListener itemLeftClik=null;
+    private List<Selectid.DataBean> mDataBeans = new ArrayList<>();
+    private int mcurrent = 0;
+    private onLeftListener itemLeftClik = null;
 
     @NonNull
     @Override
@@ -30,9 +30,9 @@ public class LeftAdapter extends RecyclerView.Adapter<LeftAdapter.hodler> {
     @Override
     public void onBindViewHolder(@NonNull hodler holder, int position) {
         TextView textView = holder.itemView.findViewById(R.id.left_category_tv);
-        if(mcurrent==position){
+        if (mcurrent == position) {
             textView.setBackgroundColor(Color.parseColor("#EFEEEE"));
-        }else {
+        } else {
             textView.setBackgroundColor(Color.WHITE);
         }
         Selectid.DataBean dataBean = mDataBeans.get(position);
@@ -41,8 +41,8 @@ public class LeftAdapter extends RecyclerView.Adapter<LeftAdapter.hodler> {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (itemLeftClik != null&&mcurrent!=position) {
-                    mcurrent=position;
+                if (itemLeftClik != null && mcurrent != position) {
+                    mcurrent = position;
                     itemLeftClik.onleftClick(dataBean);
                     notifyDataSetChanged();
                 }
@@ -56,14 +56,14 @@ public class LeftAdapter extends RecyclerView.Adapter<LeftAdapter.hodler> {
     }
 
     public void getDate(Selectid selectid) {
-        List<Selectid.DataBean> data = selectid.getData().subList(1,selectid.getData().size()-2);
+        List<Selectid.DataBean> data = selectid.getData().subList(1, selectid.getData().size() - 2);
         data.get(4).setFavorites_title("秋冬必备");
         if (data != null) {
             this.mDataBeans.clear();
             mDataBeans.addAll(data);
             notifyDataSetChanged();
         }
-        if(mDataBeans!=null){
+        if (mDataBeans != null) {
             itemLeftClik.onleftClick(mDataBeans.get(mcurrent));
         }
     }
@@ -74,10 +74,11 @@ public class LeftAdapter extends RecyclerView.Adapter<LeftAdapter.hodler> {
         }
     }
 
-    public void onLeftClick(onLeftListener left){
-        this.itemLeftClik=left;
+    public void onLeftClick(onLeftListener left) {
+        this.itemLeftClik = left;
     }
-    public interface onLeftListener{
+
+    public interface onLeftListener {
         void onleftClick(Selectid.DataBean item);
     }
 }

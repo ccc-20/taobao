@@ -17,8 +17,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class ISpecialPresenterImpl implements ISepicialPresenter {
-    private  int mpage =1;
-    private ISepcialCallback mCallback=null;
+    private int mpage = 1;
+    private ISepcialCallback mCallback = null;
     private final Api mApi;
 
     public ISpecialPresenterImpl() {
@@ -29,41 +29,40 @@ public class ISpecialPresenterImpl implements ISepicialPresenter {
 
     @Override
     public void onSellContent() {
-        if(mCallback!=null){
+        if (mCallback != null) {
             mCallback.onLoading();
         }
-        //LogUtils.d(this,specialUrl);
         String specialUrl = UrlUtiles.getSpecialUrl(mpage);
         Call<SpecialContent> task = mApi.getSpecialContent(specialUrl);
-        //LogUtils.d(this,task.toString());
         task.enqueue(new Callback<SpecialContent>() {
             @Override
             public void onResponse(Call<SpecialContent> call, Response<SpecialContent> response) {
-                int code=response.code();
-                LogUtils.d(this,code+"");
-                if(code== HttpURLConnection.HTTP_OK){
+                int code = response.code();
+                LogUtils.d(this, code + "");
+                if (code == HttpURLConnection.HTTP_OK) {
                     SpecialContent content = response.body();
                     onSuccess(content);
-                }else {
+                } else {
                     onerror();
                 }
             }
+
             @Override
             public void onFailure(Call<SpecialContent> call, Throwable t) {
                 onerror();
             }
         });
-        
+
 
     }
 
     private void onSuccess(SpecialContent content) {
         if (mCallback != null) {
             try {
-                int size=content.getData().getTbk_dg_optimus_material_response().getResult_list().getMap_data().size();
-                if(size==0){
+                int size = content.getData().getTbk_dg_optimus_material_response().getResult_list().getMap_data().size();
+                if (size == 0) {
                     onEmpty();
-                }else {
+                } else {
                     mCallback.SpecialContentLoad(content);
                 }
             } catch (Exception e) {
@@ -74,7 +73,7 @@ public class ISpecialPresenterImpl implements ISepicialPresenter {
     }
 
     private void onEmpty() {
-        if(mCallback!=null)
+        if (mCallback != null)
             mCallback.onEmpty();
     }
 
@@ -97,11 +96,11 @@ public class ISpecialPresenterImpl implements ISepicialPresenter {
         task.enqueue(new Callback<SpecialContent>() {
             @Override
             public void onResponse(Call<SpecialContent> call, Response<SpecialContent> response) {
-                int code=response.code();
-                if(code== HttpURLConnection.HTTP_OK){
+                int code = response.code();
+                if (code == HttpURLConnection.HTTP_OK) {
                     SpecialContent content = response.body();
                     onMoreLoaded(content);
-                }else {
+                } else {
                     onLoadMoreError();
                 }
             }
@@ -116,17 +115,16 @@ public class ISpecialPresenterImpl implements ISepicialPresenter {
 
     private void onLoadMoreError() {
         mpage--;
-         mCallback.onLoadMoreerror();
+        mCallback.onLoadMoreerror();
     }
 
     private void onMoreLoaded(SpecialContent content) {
         if (mCallback != null) {
             try {
-                int size=content.getData().getTbk_dg_optimus_material_response().getResult_list().getMap_data().size();
-                if(size==0){
+                int size = content.getData().getTbk_dg_optimus_material_response().getResult_list().getMap_data().size();
+                if (size == 0) {
                     mCallback.onLoadMoreerror();
-                }else {
-                    //mCallback.SpecialContentLoad(content);
+                } else {
                     mCallback.LoadMore(content);
                 }
             } catch (Exception e) {
@@ -138,11 +136,11 @@ public class ISpecialPresenterImpl implements ISepicialPresenter {
 
     @Override
     public void registerViewCallback(ISepcialCallback callback) {
-        this.mCallback=callback;
+        this.mCallback = callback;
     }
 
     @Override
     public void unregisterViewCallback(ISepcialCallback callback) {
-        this.mCallback=null;
+        this.mCallback = null;
     }
 }

@@ -24,9 +24,9 @@ import retrofit2.Retrofit;
 public class SearchPresenterImpl implements IsearchPresenter {
 
     private final Api mApi;
-    private ISearchCallback mCallback=null;
-    public static int mcurrentPage=0;
-    private String mkey=null;
+    private ISearchCallback mCallback = null;
+    public static int mcurrentPage = 0;
+    private String mkey = null;
 
     public SearchPresenterImpl() {
         Retrofit retrofit = RetrofitManager.getInstance().getRetrofit();
@@ -37,7 +37,7 @@ public class SearchPresenterImpl implements IsearchPresenter {
     public void getHistories() {
         CacheUtiles instance = CacheUtiles.getInstance();
         Histroies value = instance.getValue(KEY_HISTORY, Histroies.class);
-        if(mCallback!=null){
+        if (mCallback != null) {
             mCallback.onHistoriesLoaded(value);
         }
     }
@@ -51,41 +51,40 @@ public class SearchPresenterImpl implements IsearchPresenter {
         }
     }
 
-    public static final String KEY_HISTORY="key_history";
+    public static final String KEY_HISTORY = "key_history";
 
-    private void saveHistory(String history){
-        //this.deleteHistories();
+    private void saveHistory(String history) {
         CacheUtiles instance = CacheUtiles.getInstance();
         Histroies value = instance.getValue(KEY_HISTORY, Histroies.class);
-        List<String> list=null;
-        if(value!=null&&value.getList()!=null){
-             list= value.getList();
-            if(list.contains(history)){
+        List<String> list = null;
+        if (value != null && value.getList() != null) {
+            list = value.getList();
+            if (list.contains(history)) {
                 list.remove(history);
             }
         }
-        if(list==null) {
+        if (list == null) {
             list = new ArrayList<>();
         }
-        if(value==null){
-            value=new Histroies();
+        if (value == null) {
+            value = new Histroies();
         }
         value.setList(list);
-        if(list.size()>10){
-            list=list.subList(0,10);
+        if (list.size() > 10) {
+            list = list.subList(0, 10);
         }
         //TODO
-        list.add(0,history);
-        instance.saveCache(KEY_HISTORY,value);
+        list.add(0, history);
+        instance.saveCache(KEY_HISTORY, value);
 
     }
+
     @Override
     public void doSearch(String key) {
-        LogUtils.d(this,key);
-        if (mkey==null||!mkey.equals(key)) {
+        LogUtils.d(this, key);
+        if (mkey == null || !mkey.equals(key)) {
             this.saveHistory(key);
             this.mkey = key;
-            //LogUtils.d(this,key);
         }
         if (mCallback != null) {
             mCallback.onLoading();
@@ -94,15 +93,14 @@ public class SearchPresenterImpl implements IsearchPresenter {
         task.enqueue(new Callback<SearchResult>() {
             @Override
             public void onResponse(Call<SearchResult> call, Response<SearchResult> response) {
-                int code=response.code();
-                LogUtils.d(this,code+"");
-                if(code==HttpURLConnection.HTTP_OK){
-                    if(response.body()!=null) {
+                int code = response.code();
+                if (code == HttpURLConnection.HTTP_OK) {
+                    if (response.body() != null) {
                         handleSearchResult(response.body());
-                    }else {
+                    } else {
                         onError();
                     }
-                }else {
+                } else {
                     onError();
                 }
             }
@@ -123,7 +121,7 @@ public class SearchPresenterImpl implements IsearchPresenter {
 
 
     private void handleSearchResult(SearchResult body) {
-        if(mCallback!=null) {
+        if (mCallback != null) {
             if (isResultEmpty(body)) {
                 mCallback.onEmpty();
             } else {
@@ -132,22 +130,21 @@ public class SearchPresenterImpl implements IsearchPresenter {
         }
     }
 
-    private boolean isResultEmpty(SearchResult body){
-        try{
-            return body==null||body.getData().getTbk_dg_material_optional_response().getResult_list().getMap_data().size()==0;
-        }catch (Exception e){
+    private boolean isResultEmpty(SearchResult body) {
+        try {
+            return body == null || body.getData().getTbk_dg_material_optional_response().getResult_list().getMap_data().size() == 0;
+        } catch (Exception e) {
             return false;
         }
     }
 
     @Override
     public void reSearch() {
-        if(mkey!=null){
-            if(mCallback!=null){
-                //LogUtils.d(this,mkey);
+        if (mkey != null) {
+            if (mCallback != null) {
                 this.doSearch(mkey);
             }
-        }else{
+        } else {
             mCallback.onNetworkError();
         }
     }
@@ -155,9 +152,9 @@ public class SearchPresenterImpl implements IsearchPresenter {
     @Override
     public void loadMore() {
         mcurrentPage++;
-        if(mCallback!=null){
+        if (mCallback != null) {
             doSearchMore();
-        }else {
+        } else {
             mCallback.onEmpty();
         }
     }
@@ -167,10 +164,10 @@ public class SearchPresenterImpl implements IsearchPresenter {
         task.enqueue(new Callback<SearchResult>() {
             @Override
             public void onResponse(Call<SearchResult> call, Response<SearchResult> response) {
-                int code=response.code();
-                if(code==HttpURLConnection.HTTP_OK){
+                int code = response.code();
+                if (code == HttpURLConnection.HTTP_OK) {
                     handleMoreSearchResult(response.body());
-                }else {
+                } else {
                     onLoadMoreError();
                 }
             }
@@ -183,16 +180,16 @@ public class SearchPresenterImpl implements IsearchPresenter {
     }
 
     private void handleMoreSearchResult(SearchResult body) {
-        if(isResultEmpty(body)){
+        if (isResultEmpty(body)) {
             mCallback.onMoreEmpty();
-        }else {
+        } else {
             mCallback.onMoreLoaded(body);
         }
     }
 
     private void onLoadMoreError() {
         mcurrentPage--;
-        if(mCallback!=null){
+        if (mCallback != null) {
             mCallback.onMoreError();
         }
     }
@@ -204,13 +201,12 @@ public class SearchPresenterImpl implements IsearchPresenter {
             @Override
             public void onResponse(Call<Recommed> call, Response<Recommed> response) {
                 int code = response.code();
-                LogUtils.d(this,code+"     ");
-                if(code== HttpURLConnection.HTTP_OK){
-                    if(mCallback!=null) {
+                if (code == HttpURLConnection.HTTP_OK) {
+                    if (mCallback != null) {
                         mCallback.onRecommed(response.body().getData());
                     }
                 }
-                
+
             }
 
             @Override
@@ -222,11 +218,11 @@ public class SearchPresenterImpl implements IsearchPresenter {
 
     @Override
     public void registerViewCallback(ISearchCallback callback) {
-        this.mCallback=callback;
+        this.mCallback = callback;
     }
 
     @Override
     public void unregisterViewCallback(ISearchCallback callback) {
-        this.mCallback=null;
+        this.mCallback = null;
     }
 }

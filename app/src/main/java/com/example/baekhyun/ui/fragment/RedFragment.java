@@ -47,7 +47,7 @@ public class RedFragment extends BaseFragment implements ISepcialCallback, Speci
     private RecyclerView mRecyclerView;
     private SpecialAdapter mSpecialAdapter;
     private TwinklingRefreshLayout tk;
-    private TicketParams mTicketParams=null;
+    private TicketParams mTicketParams = null;
     private TicketResult mBody;
     private LinearLayout mLinearLayout;
 
@@ -58,31 +58,31 @@ public class RedFragment extends BaseFragment implements ISepcialCallback, Speci
 
     @Override
     protected View loadRootView(LayoutInflater inflater, ViewGroup container) {
-        return inflater.inflate(R.layout.base_other_title,container,false);
+        return inflater.inflate(R.layout.base_other_title, container, false);
     }
 
     @Override
     protected void initView(View view) {
-        mRecyclerView=view.findViewById(R.id.special_content);
-        tk=view.findViewById(R.id.special_reflash);
+        mRecyclerView = view.findViewById(R.id.special_content);
+        tk = view.findViewById(R.id.special_reflash);
         tk.setEnableRefresh(false);
         tk.setEnableLoadmore(true);
         mSpecialAdapter = new SpecialAdapter();
-        GridLayoutManager grid=new GridLayoutManager(getContext(),2);
+        GridLayoutManager grid = new GridLayoutManager(getContext(), 2);
         mRecyclerView.setLayoutManager(grid);
         mRecyclerView.setAdapter(mSpecialAdapter);
-        mLinearLayout=view.findViewById(R.id.network_error);
+        mLinearLayout = view.findViewById(R.id.network_error);
         //LogUtils.d(this,mRecyclerView.toString());
         mRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
             public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
-                outRect.top=8;
-                outRect.bottom=8;
-                outRect.left=8;
-                outRect.right=8 ;
+                outRect.top = 8;
+                outRect.bottom = 8;
+                outRect.left = 8;
+                outRect.right = 8;
             }
         });
-       // setUpState(State.SUCCESS);
+        // setUpState(State.SUCCESS);
     }
 
     @Override
@@ -155,26 +155,26 @@ public class RedFragment extends BaseFragment implements ISepcialCallback, Speci
     @Override
     protected void release() {
         super.release();
-        if(mSpecialPresenter!=null)
-        mSpecialPresenter.unregisterViewCallback(this);
+        if (mSpecialPresenter != null)
+            mSpecialPresenter.unregisterViewCallback(this);
     }
 
     @Override
     public void Specialclick(SpecialContent.DataBean.TbkDgOptimusMaterialResponseBean.ResultListBean.MapDataBean mapDataBean) {
-        String url="https:"+mapDataBean.getCoupon_click_url();
+        String url = "https:" + mapDataBean.getCoupon_click_url();
         //String detailurl="https:"+mapDataBean.getClick_url();
-        Retrofit retrofit= RetrofitManager.getInstance().getRetrofit();
+        Retrofit retrofit = RetrofitManager.getInstance().getRetrofit();
         Api api = retrofit.create(Api.class);
         mTicketParams = new TicketParams(url, mapDataBean.getTitle());
         Call<TicketResult> task = api.getTicket(mTicketParams);
         task.enqueue(new Callback<TicketResult>() {
             @Override
             public void onResponse(Call<TicketResult> call, Response<TicketResult> response) {
-                int code=response.code();
-                if (code== HttpURLConnection.HTTP_OK) {
+                int code = response.code();
+                if (code == HttpURLConnection.HTTP_OK) {
                     mBody = response.body();
                     TiacketLoaded(mBody);
-                }else{
+                } else {
                     //ToastUtil.getToast("哎呀 这个没有优惠券哦");
                     onNetworkError();
                 }
@@ -192,8 +192,8 @@ public class RedFragment extends BaseFragment implements ISepcialCallback, Speci
         ClipData clipData = ClipData.newPlainText("", result.getData().getTbk_tpwd_create_response().getData().getModel());
         //LogUtils.d(this,url);
         cm.setPrimaryClip(clipData);
-        Intent taobao=new Intent();
-        ComponentName componentName=new ComponentName("com.taobao.taobao","com.taobao.tao.TBMainActivity");
+        Intent taobao = new Intent();
+        ComponentName componentName = new ComponentName("com.taobao.taobao", "com.taobao.tao.TBMainActivity");
         taobao.setComponent(componentName);
         startActivity(taobao);
     }

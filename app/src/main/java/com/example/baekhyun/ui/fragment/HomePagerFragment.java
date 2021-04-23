@@ -29,21 +29,22 @@ import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
 
 import java.util.List;
 
-public class HomePagerFragment extends BaseFragment implements ICategoryCallback,HomePagerContentAdapter.OnListclickListener{
+public class HomePagerFragment extends BaseFragment implements ICategoryCallback, HomePagerContentAdapter.OnListclickListener {
     private RecyclerView mRecyclerView;
     private TwinklingRefreshLayout mTwinklingRefreshLayout;
     private ICategoryPagerPresenter mcategoryPagePresenter;
     private int id;
     private HomePagerContentAdapter mHomePagerContentAdapter;
 
-    public static HomePagerFragment newInstance(CateGoryies.DataBean category){
-        HomePagerFragment homePagerFragment=new HomePagerFragment();
-        Bundle bundle=new Bundle();
-        bundle.putString(Constant.KEY_TITLE,category.getTitle());
-        bundle.putInt(Constant.KEY_ID,category.getId());
+    public static HomePagerFragment newInstance(CateGoryies.DataBean category) {
+        HomePagerFragment homePagerFragment = new HomePagerFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString(Constant.KEY_TITLE, category.getTitle());
+        bundle.putInt(Constant.KEY_ID, category.getId());
         homePagerFragment.setArguments(bundle);
         return homePagerFragment;
     }
+
     @Override
     public int getRootResId() {
         return R.layout.home_pager;
@@ -51,14 +52,14 @@ public class HomePagerFragment extends BaseFragment implements ICategoryCallback
 
     @Override
     protected void initView(View view) {
-        mRecyclerView=view.findViewById(R.id.home_pager_content_lists);
-        mTwinklingRefreshLayout=view.findViewById(R.id.home_pager_refresh);
+        mRecyclerView = view.findViewById(R.id.home_pager_content_lists);
+        mTwinklingRefreshLayout = view.findViewById(R.id.home_pager_refresh);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
             public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
-                outRect.top=8;
-                outRect.bottom=8;
+                outRect.top = 8;
+                outRect.bottom = 8;
             }
         });
         mHomePagerContentAdapter = new HomePagerContentAdapter();
@@ -70,10 +71,8 @@ public class HomePagerFragment extends BaseFragment implements ICategoryCallback
     @Override
     protected void initListener() {
         mHomePagerContentAdapter.setOnListclickListener(this);
-
-
         mTwinklingRefreshLayout.setOnRefreshListener(new RefreshListenerAdapter() {
-                @Override
+            @Override
             public void onLoadMore(TwinklingRefreshLayout refreshLayout) {
                 mcategoryPagePresenter.loadMore(id);
             }
@@ -83,19 +82,19 @@ public class HomePagerFragment extends BaseFragment implements ICategoryCallback
 
     @Override
     protected void initPresenter() {
-        mcategoryPagePresenter=CategoryPagePresenterImpl.getInstance();
+        mcategoryPagePresenter = CategoryPagePresenterImpl.getInstance();
         mcategoryPagePresenter.registerViewCallback(this);
     }
 
     @Override
     protected void loadDate() {
-        Bundle bundle=getArguments();
-        String title=bundle.getString(Constant.KEY_TITLE);
-        id=bundle.getInt(Constant.KEY_ID);
-        if (mcategoryPagePresenter!=null) {
+        Bundle bundle = getArguments();
+        String title = bundle.getString(Constant.KEY_TITLE);
+        id = bundle.getInt(Constant.KEY_ID);
+        if (mcategoryPagePresenter != null) {
             mcategoryPagePresenter.getContentCategoriesById(id);
         }
-        LogUtils.d(this,"title"+title+id);
+        LogUtils.d(this, "title" + title + id);
     }
 
     @Override
@@ -127,7 +126,7 @@ public class HomePagerFragment extends BaseFragment implements ICategoryCallback
     @Override
     public void onLoadMoreError() {
         ToastUtil.getToast("哎呀，网络出现了一点问题呀");
-        if (mTwinklingRefreshLayout!=null) {
+        if (mTwinklingRefreshLayout != null) {
             mTwinklingRefreshLayout.finishLoadmore();
         }
     }
@@ -135,49 +134,44 @@ public class HomePagerFragment extends BaseFragment implements ICategoryCallback
     @Override
     public void onLoadMoreEmpty() {
         ToastUtil.getToast("没有更多数据啦");
-        if (mTwinklingRefreshLayout!=null) {
+        if (mTwinklingRefreshLayout != null) {
             mTwinklingRefreshLayout.finishLoadmore();
         }
     }
 
     @Override
-    public void onLoadMoreLoaded(List<HomePagerContent.DataBean> contents ) {
+    public void onLoadMoreLoaded(List<HomePagerContent.DataBean> contents) {
         mHomePagerContentAdapter.addDate(contents);
-        if (mTwinklingRefreshLayout!=null) {
+        if (mTwinklingRefreshLayout != null) {
             mTwinklingRefreshLayout.finishLoadmore();
         }
-    }
-
-    @Override
-    public void onLooperLoaded(List<HomePagerContent.DataBean> contents) {
-
     }
 
     @Override
     protected void release() {
-        if (mcategoryPagePresenter!=null) {
+        if (mcategoryPagePresenter != null) {
             mcategoryPagePresenter.unregisterViewCallback(this);
         }
     }
 
     @Override
     public void OnitemClick(HomePagerContent.DataBean item) {
-        LogUtils.d(this,"item click-->"+item.getTitle());
+        LogUtils.d(this, "item click-->" + item.getTitle());
         handItemClick(item);
     }
 
     private void handItemClick(HomePagerContent.DataBean item) {
-        String title=item.getTitle();
+        String title = item.getTitle();
         //这个才是领券的链接！！！！
-        String url=item.getCoupon_click_url();
-        LogUtils.d(this,url);
-        if(TextUtils.isEmpty(url)){
-            url=item.getClick_url();//这是详情界面！！！
+        String url = item.getCoupon_click_url();
+        LogUtils.d(this, url);
+        if (TextUtils.isEmpty(url)) {
+            url = item.getClick_url();//这是详情界面！！！
         }
-        String cover=item.getPict_url();
-       // LogUtils.d(HomePagerFragment.class,title+url+cover);
+        String cover = item.getPict_url();
+        // LogUtils.d(HomePagerFragment.class,title+url+cover);
         ITicketPresenter ticketPresenter = PresenterManager.getInstance().getTicketPresenter();
-        ticketPresenter.getTicket(title,url,cover);
+        ticketPresenter.getTicket(title, url, cover);
         startActivity(new Intent(getContext(), TicketActivity.class));
     }
 }

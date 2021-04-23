@@ -19,9 +19,9 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class SelectPresenterImpl implements ISelectPagePresenter {
-    private ISelelctCallback mViewCallback=null;
+    private ISelelctCallback mViewCallback = null;
     private final Api mApi;
-    private Selectid.DataBean mCurrentItem=null;
+    private Selectid.DataBean mCurrentItem = null;
 
     public SelectPresenterImpl() {
         Retrofit retrofit = RetrofitManager.getInstance().getRetrofit();
@@ -30,19 +30,19 @@ public class SelectPresenterImpl implements ISelectPagePresenter {
 
     @Override
     public void getCategories() {
-        if(mViewCallback!=null){
+        if (mViewCallback != null) {
             mViewCallback.onLoading();
         }
         Call<Selectid> task = mApi.getSelectID();
         task.enqueue(new Callback<Selectid>() {
             @Override
             public void onResponse(Call<Selectid> call, Response<Selectid> response) {
-                int code= response.code();
-                LogUtils.d(SelectPresenterImpl.this,code+"");
-                if (code== HttpURLConnection.HTTP_OK) {
-                    Selectid body= response.body();
+                int code = response.code();
+                LogUtils.d(SelectPresenterImpl.this, code + "");
+                if (code == HttpURLConnection.HTTP_OK) {
+                    Selectid body = response.body();
                     mViewCallback.onCategoriesLoaded(body);
-                }else {
+                } else {
                     onLoadError();
                 }
             }
@@ -55,27 +55,25 @@ public class SelectPresenterImpl implements ISelectPagePresenter {
     }
 
     private void onLoadError() {
-        if(mViewCallback!=null) {
+        if (mViewCallback != null) {
             mViewCallback.onNetworkError();
         }
     }
 
     @Override
     public void getContentByid(Selectid.DataBean item) {
-        this.mCurrentItem=item;
-        int targetId=item.getFavorites_id();
+        this.mCurrentItem = item;
+        int targetId = item.getFavorites_id();
         String contentUrl = UrlUtiles.getContentUrl(targetId);
-        //LogUtils.d(this,contentUrl);
         Call<SelectCategory> task = mApi.getContentByid(contentUrl);
         task.enqueue(new Callback<SelectCategory>() {
             @Override
             public void onResponse(Call<SelectCategory> call, Response<SelectCategory> response) {
-                int code= response.code();
-                //LogUtils.d(SelectPresenterImpl.this,code+"");
-                if (code== HttpURLConnection.HTTP_OK) {
+                int code = response.code();
+                if (code == HttpURLConnection.HTTP_OK) {
                     SelectCategory body = response.body();
                     mViewCallback.onContentByidLoaded(body);
-                }else {
+                } else {
                     onLoadError();
                 }
             }
@@ -89,16 +87,16 @@ public class SelectPresenterImpl implements ISelectPagePresenter {
 
     @Override
     public void reloadContent() {
-        //this.getCategories();
+
     }
 
     @Override
     public void registerViewCallback(ISelelctCallback callback) {
-        this.mViewCallback=callback;
+        this.mViewCallback = callback;
     }
 
     @Override
     public void unregisterViewCallback(ISelelctCallback callback) {
-        this.mViewCallback=null;
+        this.mViewCallback = null;
     }
 }

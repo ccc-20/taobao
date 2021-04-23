@@ -6,5 +6,5 @@ public interface IBasePresenter<T> {
 
     void registerViewCallback(T callback);
 
-    void unregisterViewCallback(T  callback);
+    void unregisterViewCallback(T callback);
 }

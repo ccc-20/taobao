@@ -4,13 +4,6 @@ import java.util.List;
 
 public class CateGoryies {
 
-    /**
-     * success : true
-     * code : 10000
-     * message : 获取分类成功.
-     * data : [{"id":9660,"title":"推荐"},{"id":9649,"title":"食品"}]
-     */
-
     private boolean success;
     private int code;
     private String message;
